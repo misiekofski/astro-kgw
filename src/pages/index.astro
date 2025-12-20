@@ -2,29 +2,269 @@
 import BaseHead from '../components/BaseHead.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+import { SITE_TITLE, SITE_DESCRIPTION, KGW_DATA } from '../consts';
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="pl">
 	<head>
 		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
 	</head>
 	<body>
 		<Header />
 		<main>
-			<h1> Witajcie </h1>
-			
-			<p>Here are a few ideas on how to get started with the template:</p>
-			<ul>
-				<li>Edit this page in <code>src/pages/index.astro</code></li>
-				<li>Edit the site header items in <code>src/components/Header.astro</code></li>
-				<li>Add your name to the footer in <code>src/components/Footer.astro</code></li>
-				<li>Check out the included blog posts in <code>src/content/blog/</code></li>
-				<li>Customize the blog post page layout in <code>src/layouts/BlogPost.astro</code></li>
-			</ul>
-			
+			<!-- Sekcja powitalna -->
+			<section class="hero">
+				<h1>🌻 {KGW_DATA.shortName}</h1>
+				<p class="subtitle">w Nadolicach Wielkich</p>
+				<p class="tagline">Tradycja, wspólnota i twórczość — razem tworzymy piękno!</p>
+			</section>
+
+			<!-- O nas -->
+			<section class="section" id="o-nas">
+				<h2>👋 Kim jesteśmy?</h2>
+				<p>
+					Jesteśmy grupą pasjonatów z Nadolic Wielkich, którzy łączą tradycję z nowoczesnością. 
+					Nasze Koło Gospodyń Wiejskich to miejsce, gdzie każdy — <strong>bez względu na płeć czy wiek</strong> — 
+					może rozwijać swoje zainteresowania, uczyć się nowych umiejętności i spędzać czas w przyjaznym gronie.
+				</p>
+				<p>
+					Organizujemy warsztaty kulinarne, rękodzielnicze, spotkania integracyjne i wydarzenia kulturalne. 
+					Wspólnie pielęgnujemy lokalne tradycje i tworzymy nowe!
+				</p>
+			</section>
+
+			<!-- Jak dołączyć -->
+			<section class="section highlight" id="dolacz">
+				<h2>🤝 Dołącz do nas!</h2>
+				<p>
+					<strong>Zapraszamy wszystkich</strong> — kobiety i mężczyzn, młodszych i starszych! 
+					Nie musisz mieć żadnego doświadczenia — wystarczy chęć do działania i otwartość na nowe znajomości.
+				</p>
+				<div class="join-steps">
+					<div class="step">
+						<span class="step-number">1</span>
+						<h3>Skontaktuj się z nami</h3>
+						<p>Zadzwoń lub napisz — dane kontaktowe znajdziesz poniżej.</p>
+					</div>
+					<div class="step">
+						<span class="step-number">2</span>
+						<h3>Przyjdź na spotkanie</h3>
+						<p>Zapraszamy na nasze otwarte spotkania, gdzie poznasz członków Koła.</p>
+					</div>
+					<div class="step">
+						<span class="step-number">3</span>
+						<h3>Wypełnij deklarację</h3>
+						<p>Złóż prostą deklarację członkowską i dołącz do naszej wspólnoty!</p>
+					</div>
+				</div>
+				<p class="membership-info">
+					<strong>Składka członkowska:</strong> [Kwota składki - do uzupełnienia] rocznie
+				</p>
+			</section>
+
+			<!-- Statut -->
+			<section class="section" id="statut">
+				<h2>📜 Statut KGW</h2>
+				<p>
+					Nasze Koło działa zgodnie ze statutem zarejestrowanym w Krajowym Rejestrze Kół Gospodyń Wiejskich 
+					prowadzonym przez Agencję Restrukturyzacji i Modernizacji Rolnictwa.
+				</p>
+				<div class="statute-info">
+					<p><strong>Numer wpisu do rejestru:</strong> [Numer wpisu - do uzupełnienia]</p>
+					<p><strong>Data rejestracji:</strong> [Data rejestracji - do uzupełnienia]</p>
+				</div>
+				<p>
+					<a href="/statut" class="btn">Pobierz pełny statut (PDF)</a>
+				</p>
+			</section>
+
+			<!-- Dane kontaktowe -->
+			<section class="section contact" id="kontakt">
+				<h2>📞 Kontakt</h2>
+				<div class="contact-grid">
+					<div class="contact-card">
+						<h3>Adres</h3>
+						<p>
+							{KGW_DATA.name}<br />
+							{KGW_DATA.address.street}<br />
+							{KGW_DATA.address.postalCode} {KGW_DATA.address.city}
+						</p>
+					</div>
+					<div class="contact-card">
+						<h3>Telefony</h3>
+						{KGW_DATA.phones.map((phone) => (
+							<p><strong>{phone.label}:</strong> {phone.number}</p>
+						))}
+					</div>
+					<div class="contact-card">
+						<h3>Email</h3>
+						<p>{KGW_DATA.email}</p>
+					</div>
+					<div class="contact-card">
+						<h3>Dane formalne</h3>
+						<p><strong>NIP:</strong> {KGW_DATA.nip}</p>
+						<p><strong>REGON:</strong> {KGW_DATA.regon}</p>
+					</div>
+				</div>
+			</section>
+
 		</main>
 		<Footer />
 	</body>
 </html>
+
+<style>
+	.hero {
+		text-align: center;
+		padding: 2rem 0 3rem;
+		background: linear-gradient(135deg, var(--kgw-green-light) 0%, var(--kgw-cream) 100%);
+		border-radius: 16px;
+		margin-bottom: 2rem;
+	}
+
+	.hero h1 {
+		font-size: 2.5rem;
+		color: var(--kgw-green-dark);
+		margin-bottom: 0.25rem;
+	}
+
+	.subtitle {
+		font-size: 1.3rem;
+		color: var(--kgw-brown);
+		margin-bottom: 1rem;
+	}
+
+	.tagline {
+		font-size: 1.1rem;
+		color: rgb(var(--gray-dark));
+		font-style: italic;
+	}
+
+	.section {
+		margin-bottom: 3rem;
+		padding: 1.5rem;
+		background: white;
+		border-radius: 12px;
+		box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+	}
+
+	.section h2 {
+		color: var(--kgw-green-dark);
+		border-bottom: 3px solid var(--kgw-orange);
+		padding-bottom: 0.5rem;
+		margin-bottom: 1rem;
+	}
+
+	.highlight {
+		background: linear-gradient(135deg, var(--kgw-cream) 0%, #fff 100%);
+		border: 2px solid var(--kgw-orange);
+	}
+
+	.join-steps {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+		gap: 1.5rem;
+		margin: 2rem 0;
+	}
+
+	.step {
+		text-align: center;
+		padding: 1.5rem;
+		background: white;
+		border-radius: 12px;
+		box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+	}
+
+	.step-number {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 40px;
+		height: 40px;
+		background: var(--kgw-green);
+		color: white;
+		border-radius: 50%;
+		font-weight: bold;
+		font-size: 1.2rem;
+		margin-bottom: 0.75rem;
+	}
+
+	.step h3 {
+		color: var(--kgw-green-dark);
+		font-size: 1.1rem;
+		margin-bottom: 0.5rem;
+	}
+
+	.step p {
+		font-size: 0.95rem;
+		color: rgb(var(--gray));
+		margin: 0;
+	}
+
+	.membership-info {
+		text-align: center;
+		padding: 1rem;
+		background: white;
+		border-radius: 8px;
+		margin-top: 1rem;
+	}
+
+	.statute-info {
+		background: rgb(var(--gray-light));
+		padding: 1rem;
+		border-radius: 8px;
+		margin: 1rem 0;
+	}
+
+	.btn {
+		display: inline-block;
+		padding: 0.75rem 1.5rem;
+		background: var(--kgw-green);
+		color: white;
+		text-decoration: none;
+		border-radius: 8px;
+		font-weight: bold;
+		transition: background 0.2s;
+	}
+
+	.btn:hover {
+		background: var(--kgw-green-dark);
+		color: white;
+	}
+
+	.contact-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+		gap: 1.5rem;
+	}
+
+	.contact-card {
+		background: rgb(var(--gray-light));
+		padding: 1.25rem;
+		border-radius: 10px;
+	}
+
+	.contact-card h3 {
+		color: var(--kgw-green-dark);
+		font-size: 1rem;
+		margin-bottom: 0.75rem;
+		border-bottom: 2px solid var(--kgw-orange);
+		padding-bottom: 0.25rem;
+	}
+
+	.contact-card p {
+		margin: 0.25rem 0;
+		font-size: 0.95rem;
+	}
+
+	@media (max-width: 720px) {
+		.hero h1 {
+			font-size: 1.8rem;
+		}
+
+		.join-steps {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>
