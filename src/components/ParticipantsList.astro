@@ -1,5 +1,6 @@
 ---
 import { WORKSHOP_CONFIG } from '../consts';
+import { env } from 'cloudflare:workers';
 
 interface Props {
 	workshopType: keyof typeof WORKSHOP_CONFIG;
@@ -9,18 +10,10 @@ const { workshopType } = Astro.props;
 const workshop = WORKSHOP_CONFIG[workshopType];
 
 // Pobieranie danych z Google Sheets API
-// Dla Cloudflare Workers używamy runtime.env
-const runtime = Astro.locals.runtime;
-const API_KEY = runtime?.env?.PUBLIC_GOOGLE_SHEETS_API_KEY || import.meta.env.PUBLIC_GOOGLE_SHEETS_API_KEY;
+// Cloudflare Workers: zmienne środowiskowe przez import { env } from 'cloudflare:workers'
+const API_KEY = env.PUBLIC_GOOGLE_SHEETS_API_KEY;
 const SHEET_ID = workshop.googleSheetsId;
 const RANGE = workshop.sheetsRange;
-
-// Debug - usuń po sprawdzeniu
-console.log('Runtime available:', !!runtime);
-console.log('API_KEY exists:', !!API_KEY);
-console.log('API_KEY source:', runtime?.env?.PUBLIC_GOOGLE_SHEETS_API_KEY ? 'runtime.env' : 'import.meta.env');
-console.log('SHEET_ID:', SHEET_ID);
-console.log('RANGE:', RANGE);
 
 let participants = [];
 let fetchError = null;
@@ -64,11 +57,8 @@ const spotsLeft = workshop.maxParticipants - participants.length;
 <div class="participants-section">
 	<!-- DEBUG INFO - usuń po naprawie -->
 	<div style="background: #f0f0f0; padding: 1rem; margin-bottom: 1rem; border-radius: 8px; font-family: monospace; font-size: 0.85rem;">
-		<strong>🐛 Debug Info:</strong><br/>
-		Runtime available: {runtime ? 'YES ✅' : 'NO ❌'}<br/>
-		API_KEY from runtime.env: {runtime?.env?.PUBLIC_GOOGLE_SHEETS_API_KEY ? 'YES ✅' : 'NO ❌'}<br/>
-		API_KEY from import.meta.env: {import.meta.env.PUBLIC_GOOGLE_SHEETS_API_KEY ? 'YES ✅' : 'NO ❌'}<br/>
-		API_KEY final: {API_KEY ? 'YES ✅' : 'NO ❌'}<br/>
+		<strong>🐛 Debug Info (cloudflare:workers):</strong><br/>
+		API_KEY from cloudflare:workers: {API_KEY ? 'YES ✅' : 'NO ❌'}<br/>
 		SHEET_ID: {SHEET_ID || 'BRAK'}<br/>
 		RANGE: {RANGE || 'BRAK'}<br/>
 		{fetchError && <span style="color: red;">Error: {fetchError}</span>}
