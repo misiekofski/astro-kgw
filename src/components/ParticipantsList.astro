@@ -11,6 +11,7 @@ const workshop = WORKSHOP_CONFIG[workshopType];
 
 // Pobieranie danych z Google Sheets API
 // Cloudflare Workers: zmienne środowiskowe przez import { env } from 'cloudflare:workers'
+const envKeys = env ? Object.keys(env) : [];
 const API_KEY = env.PUBLIC_GOOGLE_SHEETS_API_KEY;
 const SHEET_ID = workshop.googleSheetsId;
 const RANGE = workshop.sheetsRange;
@@ -58,6 +59,8 @@ const spotsLeft = workshop.maxParticipants - participants.length;
 	<!-- DEBUG INFO - usuń po naprawie -->
 	<div style="background: #f0f0f0; padding: 1rem; margin-bottom: 1rem; border-radius: 8px; font-family: monospace; font-size: 0.85rem;">
 		<strong>🐛 Debug Info (cloudflare:workers):</strong><br/>
+		env object exists: {env ? 'YES' : 'NO'}<br/>
+		env keys: {envKeys.join(', ') || 'BRAK'}<br/>
 		API_KEY from cloudflare:workers: {API_KEY ? 'YES ✅' : 'NO ❌'}<br/>
 		SHEET_ID: {SHEET_ID || 'BRAK'}<br/>
 		RANGE: {RANGE || 'BRAK'}<br/>
