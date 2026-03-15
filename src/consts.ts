@@ -37,7 +37,7 @@ export const WORKSHOP_CONFIG = {
 		googleFormUrl: "https://docs.google.com/forms/d/e/1FAIpQLSePZsQEJNDmQ1yZmR05f3Y49tfKhY1dngJ7fTaO2mJGSd87xw/viewform?embedded=true",
 		// ID Google Sheets do pobierania listy uczestników (opcjonalne)
 		googleSheetsId: "1qttWNKzHdQJUnhzXTNENRxkFWoaJJTNBi3EhB4XwtAk",
-		// Zakres danych w arkuszu (np. "Odpowiedzi formularza 1!A2:E")
-		sheetsRange: ""
+		// Zakres danych w arkuszu (np. "Odpowiedzi formularza 1!A2:F")
+		sheetsRange: "Odpowiedzi formularza 1!A2:F"
 	}
 };

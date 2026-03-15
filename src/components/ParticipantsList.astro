@@ -8,19 +8,49 @@ interface Props {
 const { workshopType } = Astro.props;
 const workshop = WORKSHOP_CONFIG[workshopType];
 
-// W przyszłości tutaj można dodać pobieranie danych z Google Sheets API
-// Na razie mockujemy dane dla przykładu
-const participants = [
-	// Przykładowe dane - w produkcji będą pobierane z Google Sheets
-	// { firstName: "Jan", lastName: "Kowalski", email: "jan@example.com", phone: "123456789", registeredAt: "2026-03-15" }
-];
+// Pobieranie danych z Google Sheets API
+const API_KEY = import.meta.env.PUBLIC_GOOGLE_SHEETS_API_KEY;
+const SHEET_ID = workshop.googleSheetsId;
+const RANGE = workshop.sheetsRange;
+
+let participants = [];
+let fetchError = null;
+
+if (SHEET_ID && RANGE && API_KEY) {
+	try {
+		const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${RANGE}?key=${API_KEY}`;
+		const response = await fetch(url);
+		
+		if (!response.ok) {
+			throw new Error(`HTTP error! status: ${response.status}`);
+		}
+		
+		const data = await response.json();
+		
+		if (data.values && data.values.length > 0) {
+			participants = data.values.map((row) => ({
+				registeredAt: row[0] || '',
+				firstName: row[1] || '',
+				lastName: row[2] || '',
+				email: row[3] || '',
+				phone: row[4] || '',
+				paymentConsent: row[5] || ''
+			}));
+		}
+	} catch (error) {
+		console.error('Błąd pobierania danych z Google Sheets:', error);
+		fetchError = error.message;
+	}
+} else if (!API_KEY) {
+	fetchError = 'Brak klucza API - skonfiguruj PUBLIC_GOOGLE_SHEETS_API_KEY w pliku .env';
+}
 
 const spotsLeft = workshop.maxParticipants - participants.length;
 ---
 
 <div class="participants-section">
 	<div class="participants-header">
-		<h3>📋 Lista uczestników</h3>
+		<h3>📋 Lista zapisanych uczestników</h3>
 		<div class="spots-info">
 			<span class="spots-badge" class:list={[spotsLeft <= 5 && 'low']}>
 				{spotsLeft > 0 
@@ -31,7 +61,13 @@ const spotsLeft = workshop.maxParticipants - participants.length;
 		</div>
 	</div>
 
-	{participants.length > 0 ? (
+	{fetchError ? (
+		<div class="error-message">
+			<p>⚠️ Nie można pobrać listy uczestników.</p>
+			<p class="error-details">{fetchError}</p>
+			<p class="error-hint">Sprawdź konfigurację Google Sheets API w pliku .env</p>
+		</div>
+	) : participants.length > 0 ? (
 		<div class="participants-list">
 			<table class="participants-table">
 				<thead>
@@ -169,6 +205,33 @@ const spotsLeft = workshop.maxParticipants - participants.length;
 	.info-note p {
 		margin: 0;
 		font-size: 0.9rem;
+		color: rgb(var(--gray-dark));
+	}
+
+	.error-message {
+		background: #fff3cd;
+		color: #856404;
+		padding: 2rem;
+		border-radius: 8px;
+		border: 1px solid #ffeeba;
+		text-align: center;
+	}
+
+	.error-message p {
+		margin: 0.5rem 0;
+	}
+
+	.error-details {
+		font-family: monospace;
+		font-size: 0.85rem;
+		background: rgba(0,0,0,0.05);
+		padding: 0.5rem;
+		border-radius: 4px;
+	}
+
+	.error-hint {
+		font-size: 0.9rem;
+		font-style: italic;
 		color: rgb(var(--gray-dark));
 	}
 
