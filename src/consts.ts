@@ -16,6 +16,7 @@ export const KGW_DATA = {
 	},
 	nip: "8961590952",
 	regon: "384717476",
+	phone: "+48 512 471 936",
 	phones: [
 		{ label: "Przewodnicząca", number: "Natalia Howis" },
 		{ label: "Zastępca", number: "Michał Dobrzycki" },
