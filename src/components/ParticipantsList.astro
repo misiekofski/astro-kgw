@@ -1,0 +1,191 @@
+---
+import { WORKSHOP_CONFIG } from '../consts';
+
+interface Props {
+	workshopType: keyof typeof WORKSHOP_CONFIG;
+}
+
+const { workshopType } = Astro.props;
+const workshop = WORKSHOP_CONFIG[workshopType];
+
+// W przyszłości tutaj można dodać pobieranie danych z Google Sheets API
+// Na razie mockujemy dane dla przykładu
+const participants = [
+	// Przykładowe dane - w produkcji będą pobierane z Google Sheets
+	// { firstName: "Jan", lastName: "Kowalski", email: "jan@example.com", phone: "123456789", registeredAt: "2026-03-15" }
+];
+
+const spotsLeft = workshop.maxParticipants - participants.length;
+---
+
+<div class="participants-section">
+	<div class="participants-header">
+		<h3>📋 Lista uczestników</h3>
+		<div class="spots-info">
+			<span class="spots-badge" class:list={[spotsLeft <= 5 && 'low']}>
+				{spotsLeft > 0 
+					? `Wolne miejsca: ${spotsLeft} / ${workshop.maxParticipants}`
+					: 'Brak wolnych miejsc'
+				}
+			</span>
+		</div>
+	</div>
+
+	{participants.length > 0 ? (
+		<div class="participants-list">
+			<table class="participants-table">
+				<thead>
+					<tr>
+						<th>Lp.</th>
+						<th>Imię i nazwisko</th>
+						<th>Kontakt</th>
+						<th>Data zapisu</th>
+					</tr>
+				</thead>
+				<tbody>
+					{participants.map((participant, index) => (
+						<tr>
+							<td>{index + 1}</td>
+							<td>{participant.firstName} {participant.lastName}</td>
+							<td>
+								{participant.email && <div class="contact-item">📧 {participant.email}</div>}
+								{participant.phone && <div class="contact-item">📱 {participant.phone}</div>}
+							</td>
+							<td>{new Date(participant.registeredAt).toLocaleDateString('pl-PL')}</td>
+						</tr>
+					))}
+				</tbody>
+			</table>
+		</div>
+	) : (
+		<div class="no-participants">
+			<p>🎯 Bądź pierwszą osobą, która zapisze się na warsztaty!</p>
+		</div>
+	)}
+
+	<div class="info-note">
+		<p>
+			<strong>ℹ️ Informacja:</strong> Lista uczestników jest aktualizowana automatycznie 
+			po zatwierdzeniu rejestracji i potwierdzeniu wpłaty.
+		</p>
+	</div>
+</div>
+
+<style>
+	.participants-section {
+		margin-top: 3rem;
+		padding: 1.5rem;
+		background: white;
+		border-radius: 12px;
+		box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+	}
+
+	.participants-header {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		margin-bottom: 1.5rem;
+		padding-bottom: 1rem;
+		border-bottom: 3px solid var(--kgw-orange);
+	}
+
+	.participants-header h3 {
+		color: var(--kgw-green-dark);
+		margin: 0;
+	}
+
+	.spots-info {
+		text-align: right;
+	}
+
+	.spots-badge {
+		display: inline-block;
+		padding: 0.5rem 1rem;
+		background: var(--kgw-green);
+		color: white;
+		border-radius: 20px;
+		font-weight: bold;
+		font-size: 0.9rem;
+	}
+
+	.spots-badge.low {
+		background: var(--kgw-orange);
+		animation: pulse 2s infinite;
+	}
+
+	@keyframes pulse {
+		0%, 100% { opacity: 1; }
+		50% { opacity: 0.7; }
+	}
+
+	.participants-list {
+		overflow-x: auto;
+	}
+
+	.participants-table {
+		width: 100%;
+		border-collapse: collapse;
+	}
+
+	.participants-table th {
+		background: rgb(var(--gray-light));
+		color: var(--kgw-green-dark);
+		padding: 0.75rem;
+		text-align: left;
+		font-weight: bold;
+		border-bottom: 2px solid var(--kgw-green);
+	}
+
+	.participants-table td {
+		padding: 0.75rem;
+		border-bottom: 1px solid rgb(var(--gray-light));
+	}
+
+	.participants-table tbody tr:hover {
+		background: rgb(var(--gray-light));
+	}
+
+	.contact-item {
+		font-size: 0.9rem;
+		color: rgb(var(--gray-dark));
+		margin: 0.25rem 0;
+	}
+
+	.no-participants {
+		text-align: center;
+		padding: 3rem 1rem;
+		color: rgb(var(--gray));
+		font-style: italic;
+	}
+
+	.info-note {
+		margin-top: 1.5rem;
+		padding: 1rem;
+		background: rgb(var(--gray-light));
+		border-radius: 8px;
+		border-left: 4px solid var(--kgw-green);
+	}
+
+	.info-note p {
+		margin: 0;
+		font-size: 0.9rem;
+		color: rgb(var(--gray-dark));
+	}
+
+	@media (max-width: 720px) {
+		.participants-header {
+			flex-direction: column;
+			align-items: flex-start;
+			gap: 1rem;
+		}
+
+		.participants-table {
+			font-size: 0.85rem;
+		}
+
+		.participants-table th,
+		.participants-table td {
+			padding: 0.5rem;
+		}
+	}
+</style>

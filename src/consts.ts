@@ -25,3 +25,19 @@ export const KGW_DATA = {
 	email: "pieknieitworczo.kgw@gmail.com",
 	bankAccount: "41 1600 1462 1882 8103 0000 0001"
 };
+
+// Konfiguracja warsztatów
+export const WORKSHOP_CONFIG = {
+	candles: {
+		title: "Warsztaty tworzenia świec",
+		description: "Naucz się tworzyć piękne, ręcznie robione świece!",
+		price: 30,
+		maxParticipants: 20,
+		// URL do Google Form - należy utworzyć formularz i wkleić tutaj URL
+		googleFormUrl: "https://docs.google.com/forms/d/e/1FAIpQLSePZsQEJNDmQ1yZmR05f3Y49tfKhY1dngJ7fTaO2mJGSd87xw/viewform?usp=publish-editor",
+		// ID Google Sheets do pobierania listy uczestników (opcjonalne)
+		googleSheetsId: "1qttWNKzHdQJUnhzXTNENRxkFWoaJJTNBi3EhB4XwtAk",
+		// Zakres danych w arkuszu (np. "Odpowiedzi formularza 1!A2:E")
+		sheetsRange: ""
+	}
+};

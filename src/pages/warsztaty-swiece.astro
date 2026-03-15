@@ -1,0 +1,276 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import WorkshopRegistrationForm from '../components/WorkshopRegistrationForm.astro';
+import ParticipantsList from '../components/ParticipantsList.astro';
+import { SITE_TITLE, WORKSHOP_CONFIG } from '../consts';
+
+const workshop = WORKSHOP_CONFIG.candles;
+const pageTitle = `${workshop.title} - ${SITE_TITLE}`;
+const pageDescription = `${workshop.description} Zapisz się na warsztaty już teraz!`;
+---
+
+<!doctype html>
+<html lang="pl">
+	<head>
+		<BaseHead title={pageTitle} description={pageDescription} />
+	</head>
+	<body>
+		<Header />
+		<main>
+			<!-- Sekcja nagłówkowa -->
+			<section class="hero">
+				<h1>🕯️ {workshop.title}</h1>
+				<p class="subtitle">{workshop.description}</p>
+			</section>
+
+			<!-- Informacje o warsztatach -->
+			<section class="section workshop-details">
+				<h2>📅 Szczegóły warsztatów</h2>
+				<div class="details-grid">
+					<div class="detail-card">
+						<span class="detail-icon">💰</span>
+						<h3>Koszt uczestnictwa</h3>
+						<p class="detail-value">{workshop.price} zł</p>
+						<p class="detail-note">Płatność przelewem na konto KGW</p>
+					</div>
+					<div class="detail-card">
+						<span class="detail-icon">👥</span>
+						<h3>Liczba miejsc</h3>
+						<p class="detail-value">{workshop.maxParticipants} osób</p>
+						<p class="detail-note">Zapisy do wyczerpania miejsc</p>
+					</div>
+					<div class="detail-card">
+						<span class="detail-icon">🎨</span>
+						<h3>Co zrobimy?</h3>
+						<p class="detail-note">
+							Nauczysz się technik tworzenia świec, poznasz różne rodzaje wosku 
+							i dodatków, a także zabierzesz do domu własnoręcznie wykonane świece!
+						</p>
+					</div>
+				</div>
+			</section>
+
+			<!-- Co musisz wiedzieć -->
+			<section class="section info-section">
+				<h2>ℹ️ Ważne informacje</h2>
+				<div class="info-list">
+					<div class="info-item">
+						<span class="info-number">1</span>
+						<div class="info-content">
+							<h3>Zapisz się przez formularz</h3>
+							<p>Wypełnij formularz rejestracyjny poniżej. Otrzymasz potwierdzenie na email.</p>
+						</div>
+					</div>
+					<div class="info-item">
+						<span class="info-number">2</span>
+						<div class="info-content">
+							<h3>Dokonaj wpłaty</h3>
+							<p>
+								W ciągu 3 dni od rejestracji wpłać {workshop.price} zł na konto KGW. 
+								W tytule przelewu wpisz: <strong>"Warsztaty świec - [Twoje Imię i Nazwisko]"</strong>
+							</p>
+						</div>
+					</div>
+					<div class="info-item">
+						<span class="info-number">3</span>
+						<div class="info-content">
+							<h3>Otrzymaj potwierdzenie</h3>
+							<p>Po zaksięgowaniu wpłaty otrzymasz email z potwierdzeniem i szczegółami warsztatów.</p>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- Formularz rejestracyjny -->
+			<section class="section">
+				<WorkshopRegistrationForm workshopType="candles" />
+			</section>
+
+			<!-- Lista uczestników -->
+			<section class="section">
+				<ParticipantsList workshopType="candles" />
+			</section>
+
+			<!-- Kontakt -->
+			<section class="section contact-info">
+				<h2>📞 Masz pytania?</h2>
+				<p>Skontaktuj się z nami:</p>
+				<p>📧 Email: <a href="mailto:pieknieitworczo.kgw@gmail.com">pieknieitworczo.kgw@gmail.com</a></p>
+				<p>📱 Telefon: +48 512 471 936</p>
+			</section>
+		</main>
+		<Footer />
+	</body>
+</html>
+
+<style>
+	.hero {
+		text-align: center;
+		padding: 2rem 0 3rem;
+		background: linear-gradient(135deg, var(--kgw-cream) 0%, #fff 100%);
+		border-radius: 16px;
+		margin-bottom: 2rem;
+		border: 2px solid var(--kgw-orange);
+	}
+
+	.hero h1 {
+		font-size: 2.5rem;
+		color: var(--kgw-green-dark);
+		margin-bottom: 0.5rem;
+	}
+
+	.subtitle {
+		font-size: 1.2rem;
+		color: rgb(var(--gray-dark));
+		font-style: italic;
+	}
+
+	.section {
+		margin-bottom: 3rem;
+		padding: 1.5rem;
+		background: white;
+		border-radius: 12px;
+		box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+	}
+
+	.section h2 {
+		color: var(--kgw-green-dark);
+		border-bottom: 3px solid var(--kgw-orange);
+		padding-bottom: 0.5rem;
+		margin-bottom: 1.5rem;
+	}
+
+	.workshop-details {
+		background: linear-gradient(135deg, rgb(var(--gray-light)) 0%, #fff 100%);
+	}
+
+	.details-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+		gap: 1.5rem;
+		margin-top: 1.5rem;
+	}
+
+	.detail-card {
+		text-align: center;
+		padding: 1.5rem;
+		background: white;
+		border-radius: 12px;
+		box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+		border-top: 4px solid var(--kgw-green);
+	}
+
+	.detail-icon {
+		font-size: 3rem;
+		display: block;
+		margin-bottom: 0.5rem;
+	}
+
+	.detail-card h3 {
+		color: var(--kgw-green-dark);
+		font-size: 1.1rem;
+		margin-bottom: 0.5rem;
+	}
+
+	.detail-value {
+		font-size: 1.8rem;
+		font-weight: bold;
+		color: var(--kgw-orange);
+		margin: 0.5rem 0;
+	}
+
+	.detail-note {
+		font-size: 0.9rem;
+		color: rgb(var(--gray-dark));
+		margin: 0;
+		line-height: 1.5;
+	}
+
+	.info-section {
+		background: white;
+	}
+
+	.info-list {
+		display: flex;
+		flex-direction: column;
+		gap: 1.5rem;
+	}
+
+	.info-item {
+		display: flex;
+		gap: 1.5rem;
+		align-items: flex-start;
+		padding: 1.5rem;
+		background: rgb(var(--gray-light));
+		border-radius: 12px;
+		border-left: 4px solid var(--kgw-green);
+	}
+
+	.info-number {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 40px;
+		height: 40px;
+		background: var(--kgw-green);
+		color: white;
+		border-radius: 50%;
+		font-weight: bold;
+		font-size: 1.3rem;
+		flex-shrink: 0;
+	}
+
+	.info-content h3 {
+		color: var(--kgw-green-dark);
+		margin-bottom: 0.5rem;
+		font-size: 1.1rem;
+	}
+
+	.info-content p {
+		margin: 0;
+		color: rgb(var(--gray-dark));
+		line-height: 1.6;
+	}
+
+	.contact-info {
+		text-align: center;
+		background: linear-gradient(135deg, var(--kgw-cream) 0%, #fff 100%);
+	}
+
+	.contact-info p {
+		margin: 0.75rem 0;
+		font-size: 1.1rem;
+	}
+
+	.contact-info a {
+		color: var(--kgw-green-dark);
+		text-decoration: none;
+		font-weight: bold;
+	}
+
+	.contact-info a:hover {
+		color: var(--kgw-orange);
+		text-decoration: underline;
+	}
+
+	@media (max-width: 720px) {
+		.hero h1 {
+			font-size: 1.8rem;
+		}
+
+		.details-grid {
+			grid-template-columns: 1fr;
+		}
+
+		.info-item {
+			flex-direction: column;
+			text-align: center;
+		}
+
+		.info-number {
+			margin: 0 auto;
+		}
+	}
+</style>
