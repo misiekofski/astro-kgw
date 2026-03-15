@@ -1,6 +1,5 @@
 ---
 import { WORKSHOP_CONFIG } from '../consts';
-import { env } from 'cloudflare:workers';
 
 interface Props {
 	workshopType: keyof typeof WORKSHOP_CONFIG;
@@ -10,9 +9,46 @@ const { workshopType } = Astro.props;
 const workshop = WORKSHOP_CONFIG[workshopType];
 
 // Pobieranie danych z Google Sheets API
-// Cloudflare Workers: zmienne środowiskowe przez import { env } from 'cloudflare:workers'
-const envKeys = env ? Object.keys(env) : [];
-const API_KEY = env.PUBLIC_GOOGLE_SHEETS_API_KEY;
+// Próba różnych metod dostępu do zmiennych środowiskowych na Cloudflare Workers
+let API_KEY = '';
+let debugSource = 'none';
+
+// Metoda 1: process.env (nodejs_compat)
+try {
+	if (process.env.PUBLIC_GOOGLE_SHEETS_API_KEY) {
+		API_KEY = process.env.PUBLIC_GOOGLE_SHEETS_API_KEY;
+		debugSource = 'process.env';
+	}
+} catch (e) {}
+
+// Metoda 2: Astro.locals.runtime.env (starsze wersje adaptera)
+if (!API_KEY) {
+	try {
+		const runtime = (Astro.locals as any).runtime;
+		if (runtime?.env?.PUBLIC_GOOGLE_SHEETS_API_KEY) {
+			API_KEY = runtime.env.PUBLIC_GOOGLE_SHEETS_API_KEY;
+			debugSource = 'Astro.locals.runtime.env';
+		}
+	} catch (e) {}
+}
+
+// Metoda 3: cloudflare:workers env
+if (!API_KEY) {
+	try {
+		const { env } = await import('cloudflare:workers');
+		if (env?.PUBLIC_GOOGLE_SHEETS_API_KEY) {
+			API_KEY = env.PUBLIC_GOOGLE_SHEETS_API_KEY;
+			debugSource = 'cloudflare:workers';
+		}
+	} catch (e) {}
+}
+
+// Metoda 4: import.meta.env (lokalne .env)
+if (!API_KEY && import.meta.env.PUBLIC_GOOGLE_SHEETS_API_KEY) {
+	API_KEY = import.meta.env.PUBLIC_GOOGLE_SHEETS_API_KEY;
+	debugSource = 'import.meta.env';
+}
+
 const SHEET_ID = workshop.googleSheetsId;
 const RANGE = workshop.sheetsRange;
 
@@ -58,10 +94,9 @@ const spotsLeft = workshop.maxParticipants - participants.length;
 <div class="participants-section">
 	<!-- DEBUG INFO - usuń po naprawie -->
 	<div style="background: #f0f0f0; padding: 1rem; margin-bottom: 1rem; border-radius: 8px; font-family: monospace; font-size: 0.85rem;">
-		<strong>🐛 Debug Info (cloudflare:workers):</strong><br/>
-		env object exists: {env ? 'YES' : 'NO'}<br/>
-		env keys: {envKeys.join(', ') || 'BRAK'}<br/>
-		API_KEY from cloudflare:workers: {API_KEY ? 'YES ✅' : 'NO ❌'}<br/>
+		<strong>🐛 Debug Info:</strong><br/>
+		API_KEY found: {API_KEY ? 'YES ✅' : 'NO ❌'}<br/>
+		Source: {debugSource}<br/>
 		SHEET_ID: {SHEET_ID || 'BRAK'}<br/>
 		RANGE: {RANGE || 'BRAK'}<br/>
 		{fetchError && <span style="color: red;">Error: {fetchError}</span>}
