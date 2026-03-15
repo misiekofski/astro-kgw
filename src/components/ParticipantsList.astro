@@ -62,6 +62,18 @@ const spotsLeft = workshop.maxParticipants - participants.length;
 ---
 
 <div class="participants-section">
+	<!-- DEBUG INFO - usuń po naprawie -->
+	<div style="background: #f0f0f0; padding: 1rem; margin-bottom: 1rem; border-radius: 8px; font-family: monospace; font-size: 0.85rem;">
+		<strong>🐛 Debug Info:</strong><br/>
+		Runtime available: {runtime ? 'YES ✅' : 'NO ❌'}<br/>
+		API_KEY from runtime.env: {runtime?.env?.PUBLIC_GOOGLE_SHEETS_API_KEY ? 'YES ✅' : 'NO ❌'}<br/>
+		API_KEY from import.meta.env: {import.meta.env.PUBLIC_GOOGLE_SHEETS_API_KEY ? 'YES ✅' : 'NO ❌'}<br/>
+		API_KEY final: {API_KEY ? 'YES ✅' : 'NO ❌'}<br/>
+		SHEET_ID: {SHEET_ID || 'BRAK'}<br/>
+		RANGE: {RANGE || 'BRAK'}<br/>
+		{fetchError && <span style="color: red;">Error: {fetchError}</span>}
+	</div>
+	
 	<div class="participants-header">
 		<h3>📋 Lista zapisanych uczestników</h3>
 		<div class="spots-info">
