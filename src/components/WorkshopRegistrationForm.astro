@@ -19,147 +19,38 @@ const workshop = WORKSHOP_CONFIG[workshopType];
 		</div>
 	</div>
 
-	<form id="workshop-form" class="registration-form">
-		<div class="form-group">
-			<label for="firstName">Imię *</label>
-			<input 
-				type="text" 
-				id="firstName" 
-				name="firstName" 
-				required 
-				placeholder="Twoje imię"
-			/>
-		</div>
+	<div class="payment-info-box">
+		<h3>💳 Informacje o płatności</h3>
+		<p>Opłata za warsztaty: <strong>{workshop.price} zł</strong></p>
+		<p>Numer konta KGW:</p>
+		<p class="bank-account">{KGW_DATA.bankAccount}</p>
+		<p class="payment-note">
+			Tytuł przelewu: <strong>Warsztaty świec - [Twoje Imię i Nazwisko]</strong>
+		</p>
+	</div>
 
-		<div class="form-group">
-			<label for="lastName">Nazwisko *</label>
-			<input 
-				type="text" 
-				id="lastName" 
-				name="lastName" 
-				required 
-				placeholder="Twoje nazwisko"
-			/>
+	{workshop.googleFormUrl ? (
+		<div class="google-form-container">
+			<iframe 
+				src={workshop.googleFormUrl}
+				width="100%" 
+				height="1400" 
+				frameborder="0" 
+				marginheight="0" 
+				marginwidth="0"
+				title="Formularz rejestracyjny na warsztaty"
+			>
+				Ładowanie formularza...
+			</iframe>
 		</div>
-
-		<div class="form-group">
-			<label for="email">Email *</label>
-			<input 
-				type="email" 
-				id="email" 
-				name="email" 
-				required 
-				placeholder="twoj@email.pl"
-			/>
+	) : (
+		<div class="no-form-warning">
+			<p>⚠️ Formularz nie jest jeszcze skonfigurowany. Skontaktuj się z nami:</p>
+			<p><a href="mailto:{KGW_DATA.email}">{KGW_DATA.email}</a></p>
 		</div>
-
-		<div class="form-group">
-			<label for="phone">Telefon</label>
-			<input 
-				type="tel" 
-				id="phone" 
-				name="phone" 
-				placeholder="+48 123 456 789"
-			/>
-		</div>
-
-		<div class="payment-info">
-			<h3>💳 Informacje o płatności</h3>
-			<p>Opłata za warsztaty: <strong>{workshop.price} zł</strong></p>
-			<p>Numer konta KGW:</p>
-			<p class="bank-account">{KGW_DATA.bankAccount}</p>
-			<p class="payment-note">
-				Tytuł przelewu: <strong>Warsztaty świec - [Twoje Imię i Nazwisko]</strong>
-			</p>
-		</div>
-
-		<div class="form-group checkbox-group">
-			<label class="checkbox-label">
-				<input 
-					type="checkbox" 
-					id="paymentConsent" 
-					name="paymentConsent" 
-					required
-				/>
-				<span>
-					Potwierdzam, że zapoznałem/am się z informacjami o płatności i zobowiązuję się 
-					do wpłaty {workshop.price} zł na podane konto KGW w ciągu 3 dni od rejestracji. *
-				</span>
-			</label>
-		</div>
-
-		<div class="form-group checkbox-group">
-			<label class="checkbox-label">
-				<input 
-					type="checkbox" 
-					id="dataConsent" 
-					name="dataConsent" 
-					required
-				/>
-				<span>
-					Wyrażam zgodę na przetwarzanie moich danych osobowych w celu rejestracji 
-					na warsztaty zgodnie z RODO. *
-				</span>
-			</label>
-		</div>
-
-		<div class="form-actions">
-			<button type="submit" class="btn-submit">
-				📝 Zapisz się na warsztaty
-			</button>
-		</div>
-
-		<div id="form-message" class="form-message"></div>
-	</form>
+	)}
 </div>
 
-<script define:vars={{ googleFormUrl: workshop.googleFormUrl, maxParticipants: workshop.maxParticipants }}>
-	const form = document.getElementById('workshop-form');
-	const messageDiv = document.getElementById('form-message');
-
-	form.addEventListener('submit', async (e) => {
-		e.preventDefault();
-		
-		const formData = new FormData(form);
-		const data = {
-			firstName: formData.get('firstName'),
-			lastName: formData.get('lastName'),
-			email: formData.get('email'),
-			phone: formData.get('phone') || 'Nie podano',
-			paymentConsent: formData.get('paymentConsent') === 'on',
-			dataConsent: formData.get('dataConsent') === 'on',
-			timestamp: new Date().toISOString()
-		};
-
-		// Jeśli jest skonfigurowany Google Form URL
-		if (googleFormUrl) {
-			try {
-				// Tutaj można zintegrować z Google Forms API
-				// Na razie pokazujemy komunikat
-				messageDiv.className = 'form-message success';
-				messageDiv.textContent = '✅ Dziękujemy za rejestrację! Sprawdź swoją skrzynkę email.';
-				form.reset();
-				
-				// Opcjonalnie: przekierowanie do Google Forms
-				// window.open(googleFormUrl, '_blank');
-			} catch (error) {
-				messageDiv.className = 'form-message error';
-				messageDiv.textContent = '❌ Wystąpił błąd. Spróbuj ponownie lub skontaktuj się z nami.';
-			}
-		} else {
-			// Fallback: wyświetl dane do ręcznego zapisania
-			messageDiv.className = 'form-message warning';
-			messageDiv.innerHTML = `
-				<strong>⚠️ Formularz nie jest jeszcze w pełni skonfigurowany.</strong><br>
-				Zapisz poniższe dane i wyślij je na email: ${data.email}<br><br>
-				Imię: ${data.firstName}<br>
-				Nazwisko: ${data.lastName}<br>
-				Email: ${data.email}<br>
-				Telefon: ${data.phone}
-			`;
-		}
-	});
-</script>
 
 <style>
 	.workshop-registration {
@@ -204,56 +95,50 @@ const workshop = WORKSHOP_CONFIG[workshopType];
 		font-size: 0.95rem;
 	}
 
-	.registration-form {
-		background: white;
-		padding: 2rem;
-		border-radius: 12px;
-		box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-	}
-
-	.form-group {
-		margin-bottom: 1.5rem;
-	}
-
-	.form-group label {
-		display: block;
-		margin-bottom: 0.5rem;
-		color: var(--kgw-green-dark);
-		font-weight: bold;
-	}
-
-	.form-group input[type="text"],
-	.form-group input[type="email"],
-	.form-group input[type="tel"] {
-		width: 100%;
-		padding: 0.75rem;
-		border: 2px solid rgb(var(--gray-light));
-		border-radius: 8px;
-		font-size: 1rem;
-		transition: border-color 0.2s;
-	}
-
-	.form-group input:focus {
-		outline: none;
-		border-color: var(--kgw-green);
-	}
-
-	.payment-info {
+	.payment-info-box {
 		background: rgb(var(--gray-light));
 		padding: 1.5rem;
 		border-radius: 8px;
-		margin: 2rem 0;
+		margin-bottom: 2rem;
 		border-left: 4px solid var(--kgw-orange);
 	}
 
-	.payment-info h3 {
+	.payment-info-box h3 {
 		color: var(--kgw-green-dark);
 		margin-bottom: 1rem;
 		font-size: 1.1rem;
 	}
 
-	.payment-info p {
+	.payment-info-box p {
 		margin: 0.5rem 0;
+	}
+
+	.google-form-container {
+		background: white;
+		padding: 1rem;
+		border-radius: 12px;
+		box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+		overflow: hidden;
+	}
+
+	.google-form-container iframe {
+		display: block;
+		width: 100%;
+		border: none;
+	}
+
+	.no-form-warning {
+		background: #fff3cd;
+		color: #856404;
+		padding: 2rem;
+		border-radius: 8px;
+		border: 1px solid #ffeeba;
+		text-align: center;
+	}
+
+	.no-form-warning a {
+		color: var(--kgw-green-dark);
+		font-weight: bold;
 	}
 
 	.bank-account {
@@ -273,86 +158,18 @@ const workshop = WORKSHOP_CONFIG[workshopType];
 		margin-top: 1rem;
 	}
 
-	.checkbox-group {
-		margin: 1.5rem 0;
-	}
-
-	.checkbox-label {
-		display: flex;
-		align-items: flex-start;
-		gap: 0.75rem;
-		cursor: pointer;
-	}
-
-	.checkbox-label input[type="checkbox"] {
-		margin-top: 0.25rem;
-		width: 18px;
-		height: 18px;
-		cursor: pointer;
-	}
-
-	.checkbox-label span {
-		flex: 1;
-		line-height: 1.5;
-	}
-
-	.form-actions {
-		margin-top: 2rem;
-		text-align: center;
-	}
-
-	.btn-submit {
-		padding: 1rem 2rem;
-		background: var(--kgw-green);
-		color: white;
-		border: none;
-		border-radius: 8px;
-		font-size: 1.1rem;
-		font-weight: bold;
-		cursor: pointer;
-		transition: background 0.2s;
-	}
-
-	.btn-submit:hover {
-		background: var(--kgw-green-dark);
-	}
-
-	.form-message {
-		margin-top: 1.5rem;
-		padding: 1rem;
-		border-radius: 8px;
-		display: none;
-	}
-
-	.form-message.success {
-		display: block;
-		background: #d4edda;
-		color: #155724;
-		border: 1px solid #c3e6cb;
-	}
-
-	.form-message.error {
-		display: block;
-		background: #f8d7da;
-		color: #721c24;
-		border: 1px solid #f5c6cb;
-	}
-
-	.form-message.warning {
-		display: block;
-		background: #fff3cd;
-		color: #856404;
-		border: 1px solid #ffeeba;
-	}
-
 	@media (max-width: 720px) {
-		.registration-form {
-			padding: 1.5rem;
-		}
-
 		.workshop-info {
 			flex-direction: column;
 			align-items: center;
+		}
+
+		.google-form-container {
+			padding: 0.5rem;
+		}
+
+		.google-form-container iframe {
+			height: 1600px;
 		}
 	}
 </style>
