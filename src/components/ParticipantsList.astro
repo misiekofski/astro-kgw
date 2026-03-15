@@ -9,9 +9,18 @@ const { workshopType } = Astro.props;
 const workshop = WORKSHOP_CONFIG[workshopType];
 
 // Pobieranie danych z Google Sheets API
-const API_KEY = import.meta.env.PUBLIC_GOOGLE_SHEETS_API_KEY;
+// Dla Cloudflare Workers używamy runtime.env
+const runtime = Astro.locals.runtime;
+const API_KEY = runtime?.env?.PUBLIC_GOOGLE_SHEETS_API_KEY || import.meta.env.PUBLIC_GOOGLE_SHEETS_API_KEY;
 const SHEET_ID = workshop.googleSheetsId;
 const RANGE = workshop.sheetsRange;
+
+// Debug - usuń po sprawdzeniu
+console.log('Runtime available:', !!runtime);
+console.log('API_KEY exists:', !!API_KEY);
+console.log('API_KEY source:', runtime?.env?.PUBLIC_GOOGLE_SHEETS_API_KEY ? 'runtime.env' : 'import.meta.env');
+console.log('SHEET_ID:', SHEET_ID);
+console.log('RANGE:', RANGE);
 
 let participants = [];
 let fetchError = null;
@@ -42,7 +51,11 @@ if (SHEET_ID && RANGE && API_KEY) {
 		fetchError = error.message;
 	}
 } else if (!API_KEY) {
-	fetchError = 'Brak klucza API - skonfiguruj PUBLIC_GOOGLE_SHEETS_API_KEY w pliku .env';
+	fetchError = 'Brak klucza API - skonfiguruj PUBLIC_GOOGLE_SHEETS_API_KEY w zmiennych środowiskowych';
+} else if (!SHEET_ID) {
+	fetchError = 'Brak ID arkusza Google Sheets w konfiguracji';
+} else if (!RANGE) {
+	fetchError = 'Brak zakresu danych (sheetsRange) w konfiguracji';
 }
 
 const spotsLeft = workshop.maxParticipants - participants.length;

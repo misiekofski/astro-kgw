@@ -1,0 +1,14 @@
+# Cloudflare Workers configuration
+name = "astro-kgw"
+compatibility_date = "2024-01-01"
+
+# Bindings dla zmiennych środowiskowych
+# Secrets są ustawiane przez Cloudflare Dashboard lub wrangler CLI
+# i automatycznie dostępne w runtime.env
+
+[vars]
+# Publiczne zmienne (opcjonalne, nie używaj dla sekretów!)
+# PUBLIC_SITE_URL = "https://kgw.nadolicewielkie.org"
+
+# Secrets (ustawiane przez Dashboard):
+# - PUBLIC_GOOGLE_SHEETS_API_KEY (już ustawiony w Dashboard)

@@ -38,6 +38,6 @@ export const WORKSHOP_CONFIG = {
 		// ID Google Sheets do pobierania listy uczestników (opcjonalne)
 		googleSheetsId: "1qttWNKzHdQJUnhzXTNENRxkFWoaJJTNBi3EhB4XwtAk",
 		// Zakres danych w arkuszu (np. "Odpowiedzi formularza 1!A2:F")
-		sheetsRange: "Odpowiedzi formularza 1!A2:F"
+		sheetsRange: "Odpowiedzi formularza 1!A2:D"
 	}
 };
