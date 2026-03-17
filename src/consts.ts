@@ -31,13 +31,24 @@ export const WORKSHOP_CONFIG = {
 	candles: {
 		title: "Warsztaty tworzenia świec",
 		description: "Naucz się tworzyć piękne, ręcznie robione świece!",
+		icon: "🕯️",
 		price: 30,
 		maxParticipants: 20,
-		// URL do Google Form - należy utworzyć formularz i wkleić tutaj URL
+		slug: "/warsztaty-swiece",
 		googleFormUrl: "https://docs.google.com/forms/d/e/1FAIpQLSePZsQEJNDmQ1yZmR05f3Y49tfKhY1dngJ7fTaO2mJGSd87xw/viewform?embedded=true",
-		// ID Google Sheets do pobierania listy uczestników (opcjonalne)
 		googleSheetsId: "1qttWNKzHdQJUnhzXTNENRxkFWoaJJTNBi3EhB4XwtAk",
-		// Zakres danych w arkuszu (np. "Odpowiedzi formularza 1!A2:F")
+		sheetsRange: "Odpowiedzi formularza 1!A2:E"
+	},
+	easterEggs: {
+		title: "Warsztaty tworzenia pisanek",
+		description: "Naucz się tworzyć piękne, tradycyjne pisanki wielkanocne!",
+		icon: "🥚",
+		price: 30,
+		maxParticipants: 20,
+		slug: "/warsztaty-pisanki",
+		// UWAGA: Zamień na opublikowany URL formularza (format: /d/e/[ID]/viewform?embedded=true)
+		googleFormUrl: "https://docs.google.com/forms/d/e/1FAIpQLSePZsQEJNDmQ1yZmR05f3Y49tfKhY1dngJ7fTaO2mJGSd87xw/viewform?embedded=true",
+		googleSheetsId: "1aR-rZox6bbhq6ECWEFMb81dlWdt9R1vvxK76fpbHvzM",
 		sheetsRange: "Odpowiedzi formularza 1!A2:E"
 	}
 };
