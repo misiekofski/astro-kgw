@@ -47,7 +47,7 @@ export const WORKSHOP_CONFIG = {
 		maxParticipants: 20,
 		slug: "/warsztaty-pisanki",
 		// UWAGA: Zamień na opublikowany URL formularza (format: /d/e/[ID]/viewform?embedded=true)
-		googleFormUrl: "https://docs.google.com/forms/d/e/1FAIpQLSePZsQEJNDmQ1yZmR05f3Y49tfKhY1dngJ7fTaO2mJGSd87xw/viewform?embedded=true",
+		googleFormUrl: "https://docs.google.com/forms/d/e/1FAIpQLSfYI8b09JHkoUzy_urI0WTTl1vhBmz9ITMI6-MO_QGe82VCtw/viewform?embedded=true",
 		googleSheetsId: "1aR-rZox6bbhq6ECWEFMb81dlWdt9R1vvxK76fpbHvzM",
 		sheetsRange: "Odpowiedzi formularza 1!A2:E"
 	}
