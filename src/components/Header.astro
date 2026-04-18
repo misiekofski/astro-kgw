@@ -1,8 +1,6 @@
 ---
 import HeaderLink from './HeaderLink.astro';
-import { SITE_TITLE, WORKSHOP_CONFIG } from '../consts';
-
-const workshops = Object.values(WORKSHOP_CONFIG);
+import { SITE_TITLE } from '../consts';
 ---
 
 <header>
@@ -12,14 +10,6 @@ const workshops = Object.values(WORKSHOP_CONFIG);
 			<HeaderLink href="/">Strona główna</HeaderLink>
 			<HeaderLink href="/#o-nas">O nas</HeaderLink>
 			<HeaderLink href="/#dolacz">Dołącz</HeaderLink>
-			<div class="dropdown">
-				<button class="dropdown-toggle">🎨 Warsztaty ▾</button>
-				<div class="dropdown-menu">
-					{workshops.map((w) => (
-						<a href={w.slug}>{w.icon} {w.title}</a>
-					))}
-				</div>
-			</div>
 			<HeaderLink href="/#statut">Statut</HeaderLink>
 			<HeaderLink href="/#kontakt">Kontakt</HeaderLink>
 			<HeaderLink href="/blog">Aktualności</HeaderLink>
@@ -61,83 +51,10 @@ const workshops = Object.values(WORKSHOP_CONFIG);
 	.social-links a {
 		display: flex;
 	}
-	.dropdown {
-		position: relative;
-		display: inline-block;
-	}
-
-	.dropdown-toggle {
-		background: none;
-		border: none;
-		cursor: pointer;
-		padding: 1em 0.5em;
-		color: var(--black);
-		font: inherit;
-		font-size: inherit;
-		border-bottom: 4px solid transparent;
-	}
-
-	.dropdown-toggle:hover {
-		border-bottom-color: var(--accent);
-	}
-
-	.dropdown-menu {
-		display: none;
-		position: absolute;
-		top: 100%;
-		left: 0;
-		background: white;
-		box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-		border-radius: 8px;
-		min-width: 260px;
-		z-index: 100;
-		overflow: hidden;
-	}
-
-	.dropdown:hover .dropdown-menu {
-		display: block;
-	}
-
-	.dropdown-menu a {
-		display: block;
-		padding: 0.75rem 1rem !important;
-		border-bottom: none !important;
-		color: var(--black);
-		text-decoration: none;
-		white-space: nowrap;
-	}
-
-	.dropdown-menu a:hover {
-		background: rgb(var(--gray-light));
-		color: var(--kgw-green-dark);
-	}
 
 	@media (max-width: 720px) {
 		.social-links {
 			display: none;
 		}
-
-		.dropdown-menu {
-			position: static;
-			box-shadow: none;
-			min-width: auto;
-		}
-
-		.dropdown .dropdown-menu {
-			display: none;
-		}
-
-		.dropdown.open .dropdown-menu {
-			display: block;
-		}
 	}
 </style>
-
-<script>
-	// Mobile dropdown toggle
-	document.querySelectorAll('.dropdown-toggle').forEach(btn => {
-		btn.addEventListener('click', () => {
-			btn.parentElement?.classList.toggle('open');
-		});
-	});
-</script>
